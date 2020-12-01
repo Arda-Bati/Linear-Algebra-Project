@@ -1,0 +1,141 @@
+% RUN ME!!
+% Project_Data_Processing
+clc; clear all;
+load Project_Data;
+
+% ********************************************************************
+% *************** (B) MSE CALC. FOR TRAIN NEUTRAL FACE ***************
+% ********************************************************************
+
+face_id = 18;
+eigenfaces_count = 190;
+MSEs = zeros(190, 1);
+for count = 1:eigenfaces_count
+    reco = reconstruct_face(Eigenfaces_PCA, count, tra_neu_mean, ...
+                            Tra_Neu_Norm(:, face_id));  
+    train_img = Train_Neutral(:, face_id);
+    MSEs(count) = sum((reco - train_img).^2, 1) / size(reco, 1);
+end
+
+figure()
+subplot(2, 1, 1);
+plot([1:eigenfaces_count], MSEs)
+title('MSEs plot, normal scale')
+subplot(2, 1, 2);
+semilogx([1:eigenfaces_count],MSEs)
+title('MSEs plot, log scale')
+
+figure()
+subplot(2, 1, 1);
+im = reshape(Train_Neutral(:, face_id), irow, icol);
+imshow((im));
+title('Original Image');
+% Reconstruction image
+subplot(2, 1, 2);
+reco = reshape(reco, irow, icol);
+imshow(reco);
+title('Reconstruction Image');
+
+% ********************************************************************
+% *************** (C) MSE CALC. FOR TRAIN SMILING FACE ***************
+% ********************************************************************
+
+face_id = 18;
+eigenfaces_count = 190;
+MSEs = zeros(190, 1);
+for count = 1:eigenfaces_count
+    reco = reconstruct_face(Eigenfaces_PCA, count, tra_neu_mean,...
+                        Tra_Smi_Norm(:, face_id));  
+    train_img = Train_Smiling(:, face_id);
+    MSEs(count) = sum((reco - train_img).^2, 1) / size(reco, 1);
+end
+
+figure()
+subplot(2, 1, 1);
+loglog([1:eigenfaces_count], MSEs)
+plot([1:eigenfaces_count], MSEs)
+yticklabels(0:0.01:0.11);
+title('MSEs plot, normal scale')
+subplot(2, 1, 2);
+semilogx([1:eigenfaces_count],10*log10(MSEs))
+title('MSEs plot, log scale')
+
+figure()
+subplot(2, 1, 1);
+im = reshape(Train_Smiling(:, face_id), irow, icol);
+imshow((im));
+title('Original Image');
+% Reconstruction image
+subplot(2, 1, 2);
+reco = reshape(reco, irow, icol);
+imshow(reco);
+title('Reconstruction Image');
+
+% ********************************************************************
+% *************** (D) MSE CALC. FOR TEST NETURAL FACE ****************
+% ********************************************************************
+
+face_id = 8;
+eigenfaces_count = 190;
+MSEs = zeros(190, 1);
+for count = 1:eigenfaces_count
+    reco = reconstruct_face(Eigenfaces_PCA, count, tra_neu_mean,...
+                            Tes_Neu_Norm(:, face_id));  
+    train_img = Test_Neutral(:, face_id);
+    MSEs(count) = sum((reco - train_img).^2, 1) / size(reco, 1);
+end
+
+figure()
+subplot(2, 1, 1);
+plot([1:eigenfaces_count], MSEs)
+title('MSEs plot, normal scale')
+subplot(2, 1, 2);
+semilogx([1:eigenfaces_count],MSEs)
+title('MSEs plot, log scale')
+
+figure()
+subplot(2, 1, 1);
+im = reshape(Test_Neutral(:, face_id), irow, icol);
+imshow((im));
+title('Original Image');
+% Reconstruction image
+subplot(2, 1, 2);
+reco = reshape(reco, irow, icol);
+imshow(reco);
+title('Reconstruction Image');
+
+
+% ********************************************************************
+% ************** (E) RECONSTRUCTION FOR NON FACE IMAGE ***************
+% ********************************************************************
+
+eigenfaces_count = 190;
+MSEs = zeros(190, 1);
+for count = 1:eigenfaces_count
+    reco = reconstruct_face(Eigenfaces_PCA, count, tra_neu_mean, car_image);  
+    MSEs(count) = sum((reco - car_image).^2, 1) / size(reco, 1);
+end
+
+figure()
+subplot(2, 1, 1);
+plot([1:eigenfaces_count], MSEs)
+title('MSEs plot, normal scale')
+subplot(2, 1, 2);
+semilogx([1:eigenfaces_count],MSEs)
+title('MSEs plot, log scale')
+
+figure()
+subplot(2, 1, 1);
+im = reshape(car_image, irow, icol);
+imshow((im));
+title('Original Image');
+% Reconstruction image
+subplot(2, 1, 2);
+reco = reshape(reco, irow, icol);
+imshow(reco);
+title('Reconstruction Image');
+
+
+
+
+
